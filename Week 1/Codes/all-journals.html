@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Journal Entry</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+ <!-- Copied from ww3school-->
+ <style> 
+    div.dotted {
+        border-style: dotted;
+        padding-top: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+    }
+    article.dotted {
+        border-style: dotted;
+        padding-top: 10px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+        padding-left: 10px;
+    }
+    p.dashed {border-style: dashed;}
+    p.solid {border-style: solid;}
+    p.double {border-style: double;}
+    p.groove {border-style: groove;}
+    p.ridge {border-style: ridge;}
+    p.inset {border-style: inset;}
+    p.outset {border-style: outset;}
+    p.none {border-style: none;}
+    p.hidden {border-style: hidden;}
+    p.mix {border-style: dotted dashed solid double;}
+</style>
+
+<body>
+    <header>
+        <h1>MERN 2024-12 BOOTCAMP</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="new-entry.html">New Entry</a></li>
+                <li><a href="all-journals.html">All Journals</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div style="font-size: 25px">
+            <strong>Main Journals</strong>
+        </div>
+
+        <!-- Journal 1 -->
+        <article class="dotted">
+            <h2>Week 0 - Taklimat Sebelum Kelas</h2> <!-- Title-->
+            <p><strong>Date:</strong> 2024/12/23</p>    <!-- Date-->
+            <p>Welcome to this journal entry. Below are some important points and insights.</p>  <!-- Header-->
+
+            <!-- Contents here-->
+            <ul>
+                <li><strong>Introduction:</strong> A brief overview of the topic.</li>
+                <li><strong>Benefits:</strong>
+                    <ul>
+                        <li>Coding improves problem-solving skills.</li>
+                        <li>It opens up numerous career opportunities.</li>
+                        <li>Helps in automating repetitive tasks.</li>
+                    </ul>
+                </li>
+                <li><strong>What is a Full-Stack Developer?</strong>
+                    <p>A Full-Stack Developer is a professional who works on both the front-end and back-end of web applications. They have expertise in multiple technologies, including databases, server management, APIs, and user interface design.</p>
+                </li>
+                <li><strong>Conclusion:</strong>
+                    <p>Coding is a valuable skill that not only enhances career prospects but also fosters creativity and logical thinking.</p>
+                </li>
+            </ul>
+        </article>
+
+        <!-- Journal 2 -->
+        <article class="dotted">
+            <h2>Week 1 - Class 1 - Setting Up</h2>
+            <p><strong>Date:</strong> 2024/12/23</p>
+            <p>On this day and night, we learned which programs are used.</p>
+
+            <!-- Contents Here -->
+            <ul>
+                <li><strong>Programs:</strong> A brief overview of the topic.</li>
+                    <ul>
+                        <li>VS-Code.</li>
+                        <li>Laragon.</li>
+                        <li>Helps in automating repetitive tasks.</li>
+                    </ul>
+                </li>
+                <li><strong>Websites and Accounts:</strong> Github.</li>
+                    <p>Code repository sites.</p>
+                </li>
+                <li><strong>Websites and Accounts:</strong> Cloudflare</li>
+                    <p>Simple web-hosting.</p>
+                </li>
+            </ul>
+        </article>
+
+        <!-- Journal 3 -->
+        <article class="dotted">
+            <h2>Week 1 - Class 2 - Introduction to HTML</h2>
+            <p><strong>Date:</strong> 2024/12/19</p>
+            <p>On this day, we learnt the basics of HTML.</p>
+
+            <!-- Contents Here -->
+            <ul>
+                <li><strong>Programs:</strong>
+                    <ul>
+                        <li>VS-Code</li>
+                        <li>Website drafting web software like Figma for quick prototyping/drafting designs of website</li>
+                        <li>Some continuation on using console</li>
+                    </ul>
+                </li>
+            </ul>
+        </article>
+    </main>
+
+    <!--journals-list.html -->
+    <section>
+        <h2>All Notes Entries</h2>
+        <ul id="journal-list">
+            <!-- Listed notes will be loaded from new-entry.html-->
+        </ul>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Asyahins </p>
+    </footer>
+
+    <!--load notes -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("new-entry-form");
+            const latestJournal = document.getElementById("latest-journal");
+            const journalList = document.getElementById("journal-list");
+            const clearButton = document.createElement("button");
+
+            // Retrieve journal entries from localStorage
+            const getJournalEntries = () => JSON.parse(localStorage.getItem("journalEntries")) || [];
+
+            // Save journal entries to localStorage
+            const saveJournalEntries = (entries) => {
+                localStorage.setItem("journalEntries", JSON.stringify(entries));
+            };
+
+            // Add new journal entry
+            if (form) {
+                form.addEventListener("submit", (event) => {
+                    event.preventDefault();
+
+                    const date = form["entry-date"].value;
+                    const title = form["entry-title"].value;
+                    const content = form["entry-content"].value.replace(/\n/g, "<br>"); //<<  Addition retains linebreaks
+                    const tags = form["entry-tags"].value.split(",").map(tag => tag.trim());
+
+                    const entry = { date, title, content, tags };
+
+                    const entries = getJournalEntries();
+                    entries.unshift(entry); // Add to the beginning
+                    saveJournalEntries(entries);
+
+                    alert("Journal entry added!"); //Not needed
+                    form.reset();
+                });
+            }
+
+            // Display the latest journal entry
+            if (latestJournal) {
+                const entries = getJournalEntries();
+                if (entries.length > 0) {
+                    const { date, title, content, tags } = entries[0];
+                    latestJournal.innerHTML = `
+                        <h3>${title}</h3>
+                        <p><strong>Date:</strong> ${date}</p>
+                        <p>${content}</p>
+                        <p><strong>Tags:</strong> ${tags.join(", ")}</p>
+                    `;
+                } else {
+                    latestJournal.innerHTML = "<p>No journal entries yet.</p>";
+                }
+            }
+
+            // Display all journal entries
+            if (journalList) {
+                const entries = getJournalEntries();
+                if (entries.length > 0) {
+                    journalList.innerHTML = entries.map(({ date, title, content, tags }) =>  //date, title, content, tags <<--- This auto adds the fields
+                        `<li> <h3></h3>
+                            <div class="dotted">
+                            <h4>
+                                <p style="font-size: 25px">Title: ${title}</p>
+                            </h4>
+                            <p><strong>Date:</strong> ${date}</p>
+                            <p>${content}</p>
+                            <p><strong>Tags:</strong> ${tags.join(", ")}</p>
+                            <br>
+                            </div>
+                        </li>`).join("");
+
+                    // Button to clear all entries
+                    clearButton.textContent = "Clear All Entries";
+                    clearButton.addEventListener("click", () => {
+                        if (confirm("Are you sure you want to delete all journal entries?")) {
+                            localStorage.removeItem("journalEntries");
+                            journalList.innerHTML = "<p>No journal entries yet.</p>";
+                        }
+                    });
+                    journalList.insertAdjacentElement("afterend", clearButton);
+                } else {
+                    journalList.innerHTML = "<p>No journal entries yet.</p>";
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>
